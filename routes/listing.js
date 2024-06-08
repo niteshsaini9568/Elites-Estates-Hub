@@ -22,6 +22,7 @@ router
 
 // new route
 router.get("/new", isLoggedIn, listingController.renderNewForm);
+router.get("/order" , (req,res)=>{res.render("product")});
 
 router
   .route("/:id")
