@@ -23,7 +23,7 @@ const listingController = require("./controllers/listing.js");
 const compression = require('compression');
 
 // const dbUrl = process.env.ATLASDB_URL;
-const dbUrl = "mongodb://127.0.0.1:27017/wanderlust2";
+const dbUrl = "mongodb+srv://Nitesh:Nitesh%40123@cluster0.6tifeca.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 main()
   .then(() => {
