@@ -1,0 +1,234 @@
+<% layout("layouts/boilerplate") %>
+  <script>
+    const mapToken = "<%= process.env.MAP_TOKEN %>";
+    const listing = <%- JSON.stringify(listing)%>;
+  </script>
+
+  <div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <div class="hero-section bg-dark text-white py-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-3"><%= listing.title %></h1>
+            <div class="d-flex align-items-center mb-3">
+              <div>
+                <p class="mb-0">Hosted by <b><%= listing.owner.username %></b></p>
+                <div class="text-warning">
+                  <% for(let i = 0; i < 5; i++) { %>
+                    <i class="bi bi-star<%= i < listing.averageRating ? '-fill' : '' %>"></i>
+                  <% } %>
+                  <span class="ms-2"><%= listing.reviews.length %> reviews</span>
+                </div>
+              </div>
+            </div>
+            <p class="lead"><%= listing.description %></p>
+          </div>
+          <div class="col-lg-6">
+            <div class="position-relative overflow-hidden rounded-3 shadow-lg">
+              <img src="<%= listing.image.url %>" class="img-fluid w-100" alt="listing_image" />
+              <div class="price-badge bg-white text-dark p-3 rounded-3 shadow">
+                <h4 class="mb-0">₹<%= listing.price.toLocaleString("en-IN") %></h4>
+                <small class="text-muted">per night</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+      <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-lg-8">
+          <!-- Amenities Section -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+              <h3 class="card-title mb-4">About this place</h3>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-geo-alt-fill text-primary fs-4 me-3"></i>
+                    <div>
+                      <h6 class="mb-0">Location</h6>
+                      <p class="text-muted mb-0"><%= listing.location %>, <%= listing.country %></p>
+                    </div>
+                  </div>
+                </div>
+                <!-- Add more amenities here if available -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Map Section -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+              <h3 class="card-title mb-4">Location</h3>
+              <div id="map" style="height: 400px; width: 100%; border-radius: 8px;"></div>
+            </div>
+          </div>
+
+          <!-- Reviews Section -->
+          <% if(listing.reviews.length > 0) { %>
+            <div class="card border-0 shadow-sm mb-4">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <h3 class="card-title mb-0">Reviews</h3>
+                  <div class="text-warning">
+                    <% for(let i = 0; i < 5; i++) { %>
+                      <i class="bi bi-star<%= i < listing.averageRating ? '-fill' : '' %>"></i>
+                    <% } %>
+                    <span class="ms-2"><%= listing.reviews.length %> reviews</span>
+                  </div>
+                </div>
+                
+                <div class="row g-3">
+                  <% for(review of listing.reviews) { %>
+                    <div class="col-12">
+                      <div class="border-bottom pb-3">
+                        <div class="d-flex align-items-center mb-2">
+                          <img src="<%= review.author.avatar || '/images/default-avatar.jpg' %>" 
+                               class="rounded-circle me-3" width="40" height="40" alt="Reviewer avatar">
+                          <div>
+                            <h6 class="mb-0">@<%= review.author.username %></h6>
+                            <div class="text-warning">
+                              <% for(let i = 0; i < 5; i++) { %>
+                                <i class="bi bi-star<%= i < review.rating ? '-fill' : '' %>"></i>
+                              <% } %>
+                            </div>
+                          </div>
+                          <% if(currUser && review.author._id.equals(currUser._id)) { %>
+                            <form class="ms-auto" method="POST"
+                              action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                              <button class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                          <% } %>
+                        </div>
+                        <p class="mb-0"><%= review.comment %></p>
+                        <small class="text-muted"><%= new Date(review.createdAt).toLocaleDateString() %></small>
+                      </div>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          <% } %>
+
+          <!-- Review Form -->
+          <% if(currUser) {%>
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="card-title mb-4">Leave a review</h3>
+                <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+                  <div class="mb-4">
+                    <label class="form-label">Rating</label>
+                    <div class="star-rating">
+                      <input type="radio" id="star5" name="review[rating]" value="5" />
+                      <label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
+                      <input type="radio" id="star4" name="review[rating]" value="4" />
+                      <label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
+                      <input type="radio" id="star3" name="review[rating]" value="3" />
+                      <label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
+                      <input type="radio" id="star2" name="review[rating]" value="2" />
+                      <label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
+                      <input type="radio" id="star1" name="review[rating]" value="1" checked />
+                      <label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
+                    </div>
+                  </div>
+                  <div class="mb-4">
+                    <label for="comment" class="form-label">Your review</label>
+                    <textarea name="review[comment]" id="comment" class="form-control" rows="4" required></textarea>
+                    <div class="invalid-feedback">Please share your experience</div>
+                  </div>
+                  <button type="submit" class="btn btn-primary px-4">Submit Review</button>
+                </form>
+              </div>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- Right Column (Booking) -->
+        <div class="col-lg-4">
+          <div class="card border-0 shadow-sm" style="top: 20px;">
+            <div class="card-body">
+              <h3 class="card-title mb-4">Booking</h3>
+              <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
+                <div class="d-grid gap-2">
+                  <a href="/listings/<%= listing._id %>/edit" class="btn btn-outline-primary">Edit Listing</a>
+                  <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-grid">
+                    <button class="btn btn-outline-danger">Delete Listing</button>
+                  </form>
+                </div>
+              <% } else { %>
+                <a href="/listings/order" class="btn btn-primary w-100 py-3 fw-bold">Book Now</a>
+                <div class="text-center mt-3">
+                  <p class="text-muted">You won't be charged yet</p>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>₹<%= listing.price.toLocaleString("en-IN") %> x 1 night</span>
+                  <span>₹<%= listing.price.toLocaleString("en-IN") %></span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Service fee</span>
+                  <span>₹<%= Math.floor(listing.price * 0.1).toLocaleString("en-IN") %></span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between fw-bold">
+                  <span>Total</span>
+                  <span>₹<%= (listing.price + Math.floor(listing.price * 0.1)).toLocaleString("en-IN") %></span>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/map.js"></script>
+  <style>
+    .hero-section {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                  url('<%= listing.image.url %>');
+      background-size: cover;
+      background-position: center;
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+    }
+    
+    .price-badge {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    
+    .star-rating {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+    
+    .star-rating input {
+      display: none;
+    }
+    
+    .star-rating label {
+      color: #ddd;
+      font-size: 1.5rem;
+      padding: 0 5px;
+      cursor: pointer;
+    }
+    
+    .star-rating input:checked ~ label,
+    .star-rating input:hover ~ label {
+      color: #ffc107;
+    }
+    
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+      color: #ffc107;
+    }
+  </style>

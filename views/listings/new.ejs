@@ -1,0 +1,174 @@
+<% layout("/layouts/boilerplate") %>
+<style>
+  .listing-form-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+    background: white;
+  }
+  .form-header {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+  }
+  .form-header:after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #1d3557;
+    margin: 0.5rem auto 0;
+  }
+  .form-control-custom {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 15px;
+    transition: all 0.3s;
+  }
+  .form-control-custom:focus {
+    border-color: #1d3557;
+    box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.1);
+  }
+  .submit-btn {
+    background-color: #1d3557;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+    width: 100%;
+    max-width: 200px;
+    display: block;
+    margin: 2rem auto 0;
+  }
+  .submit-btn:hover {
+    background-color: #142a47;
+    transform: translateY(-2px);
+  }
+  .file-upload {
+    position: relative;
+    overflow: hidden;
+  }
+  .file-upload-input {
+    position: absolute;
+    font-size: 100px;
+    opacity: 0;
+    right: 0;
+    top: 0;
+  }
+  .file-upload-label {
+    border: 1px dashed #e0e0e0;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .file-upload-label:hover {
+    border-color: #1d3557;
+    background-color: rgba(29, 53, 87, 0.03);
+  }
+  .file-upload-icon {
+    font-size: 2rem;
+    color: #1d3557;
+    margin-bottom: 0.5rem;
+  }
+</style>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="listing-form-card">
+        <h3 class="form-header">Create a New Listing</h3>
+        
+        <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+          <div class="mb-4">
+            <label for="title" class="form-label fw-semibold">Title</label>
+            <input name="listing[title]" id="title" placeholder="Add a descriptive title" type="text" 
+                   class="form-control form-control-custom" required />
+            <div class="invalid-feedback">Please provide a title for your listing</div>
+          </div>
+          
+          <div class="mb-4">
+            <label for="description" class="form-label fw-semibold">Description</label>
+            <textarea name="listing[description]" id="description" rows="5" 
+                      class="form-control form-control-custom" placeholder="Describe your listing in detail" required></textarea>
+            <div class="invalid-feedback">Please provide a detailed description</div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Listing Image</label>
+            <div class="file-upload">
+              <input name="listing[image]" type="file" class="file-upload-input" id="image" required>
+              <label for="image" class="file-upload-label">
+                <div class="file-upload-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
+                    <path d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                  </svg>
+                </div>
+                <div class="text-muted">Click to upload or drag and drop</div>
+                <small class="text-muted">PNG, JPG, GIF up to 5MB</small>
+              </label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="mb-4 col-md-4">
+              <label for="price" class="form-label fw-semibold">Price</label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input name="listing[price]" id="price" placeholder="1000" type="number" 
+                       class="form-control form-control-custom" required />
+              </div>
+              <div class="invalid-feedback">Please enter a valid price</div>
+            </div>
+            
+            <div class="mb-4 col-md-8">
+              <label for="country" class="form-label fw-semibold">Country</label>
+              <input name="listing[country]" id="country" placeholder="Country" type="text" 
+                     class="form-control form-control-custom" required />
+              <div class="invalid-feedback">Please enter a country</div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="location" class="form-label fw-semibold">Location</label>
+            <input name="listing[location]" id="location" placeholder="City, State/Province" type="text" 
+                   class="form-control form-control-custom" required />
+            <div class="invalid-feedback">Please enter a location</div>
+          </div>
+
+          <button type="submit" class="btn submit-btn text-white shadow">Create Listing</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Form validation
+  (function () {
+    'use strict';
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+    
+    // File upload preview (optional enhancement)
+    document.getElementById('image').addEventListener('change', function(e) {
+      var fileName = e.target.files[0].name;
+      var nextSibling = e.target.nextElementSibling;
+      nextSibling.querySelector('.text-muted').textContent = fileName;
+    });
+  })();
+</script>

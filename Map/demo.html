@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Display</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+    <style>
+        #map {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script>
+        const mapToken = "pk.eyJ1Ijoibml0ZXNoMzIzMjMyMzIzMiIsImEiOiJjbHZnYWFnOWYwb3J2MnNsOWF2dGtnZmVtIn0.rcLrwYBo4uL5PnQFf1_obw"; 
+        const address = "New York, USA"; 
+
+        async function showMap() {
+            try {
+                const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${mapToken}&limit=1`;
+                const response = await fetch(geocodeUrl);
+                const data = await response.json();
+
+                if (data.features.length === 0) {
+                    alert("Location not found!");
+                    return;
+                }
+
+                const coordinates = data.features[0].center;
+
+                mapboxgl.accessToken = mapToken;
+                const map = new mapboxgl.Map({
+                    container: "map",
+                    style: "mapbox://styles/mapbox/streets-v12",
+                    center: coordinates,
+                    zoom: 10
+                });
+
+                new mapboxgl.Marker({ color: "red" })
+                    .setLngLat(coordinates)
+                    .setPopup(new mapboxgl.Popup({ offset: 25 })
+                        .setHTML(`<h4>Location</h4><p>Exact location will be provided after booking</p>`))
+                    .addTo(map);
+            } catch (error) {
+                console.error("Error fetching location:", error);
+            }
+        }
+
+        showMap();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Estates Hub | Premium Real Estate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary-dark: #1d3557;
+            --primary-light: #457b9d;
+            --accent: #a8dadc;
+            --text-light: #f1faee;
+            --text-dark: #1d3557;
+            --gray-light: #f8f9fa;
+        }
+
+        /* Gradient Background */
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hover Effects */
+        .hover-scale {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-scale:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Text Gradient */
+        .text-gradient {
+            background: linear-gradient(to right, var(--accent), var(--text-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            transition: all 0.3s ease;
+            padding: 1rem 0;
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(var(--primary-dark), 0.95) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--accent) !important;
+        }
+
+        .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--accent) !important;
+        }
+
+        .btn-outline-light {
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            color: var(--text-light) !important;
+        }
+
+        .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent) !important;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-top: 80px;
+            overflow: hidden;
+        }
+
+        .hero-section .bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+            opacity: 0.2;
+            z-index: 1;
+        }
+
+        .hero-section .gradient-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(29, 53, 87, 0.7));
+            z-index: 2;
+        }
+
+        .hero-section .decor-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(50px);
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .hero-section .decor-circle:nth-child(1) {
+            top: -15%;
+            right: -15%;
+            width: 400px;
+            height: 400px;
+            background: rgba(168, 218, 220, 0.3);
+        }
+
+        .hero-section .decor-circle:nth-child(2) {
+            bottom: -15%;
+            left: -15%;
+            width: 400px;
+            height: 400px;
+            background: rgba(69, 123, 157, 0.3);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: rgba(241, 250, 238, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        .hero-content .btn {
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .hero-content .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* About Section */
+        .about-section {
+            background: linear-gradient(to bottom, var(--gray-light), white);
+            padding: 4rem 0;
+        }
+
+        .about-section h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .about-section .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .about-section .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-section .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-dark);
+            position: relative;
+            overflow: hidden;
+            padding: 4rem 0 2rem;
+        }
+
+        footer .bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+            opacity: 0.05;
+            z-index: 0;
+        }
+
+        footer .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        footer h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        footer .nav-link {
+            font-size: 0.9rem;
+            padding: 0.25rem 0;
+            color: rgba(255, 255, 255, 0.6) !important;
+            transition: color 0.3s ease;
+        }
+
+        footer .nav-link:hover {
+            color: var(--accent) !important;
+        }
+
+        footer .social-icon {
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        footer .social-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--accent);
+        }
+
+        footer .border-top {
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.5rem; }
+            .hero-content p { font-size: 1rem; }
+            .hero-content .btn { width: 100%; margin-bottom: 0.5rem; }
+            .about-section .grid md:grid-cols-2 { grid-template-columns: 1fr; }
+            footer .col-lg-4 { margin-bottom: 2rem; }
+            footer .social-icon { margin: 0 0.25rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fa-regular fa-compass me-2"></i>
+                EliteEstates
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/listings">Properties</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="/login" class="btn btn-outline-light me-2">Login</a>
+                    <a href="/signup" class="btn btn-primary">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section gradient-bg ">
+        <div class="bg-overlay"></div>
+        <div class="gradient-overlay"></div>
+        <div class="decor-circle"></div>
+        <div class="decor-circle"></div>
+        <div class="hero-content">
+            <div class="container">
+                <h1>
+                    <span class="text-white">Discover Your </span>
+                    <span class="text-gradient">Dream Property</span>
+                </h1>
+                <p>Experience luxury living with our curated selection of premium properties. Our expert agents and intelligent matching system help you find the perfect home.</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="/listings" class="btn btn-light hover-scale">Browse Properties</a>
+                    <a href="/listings/new" class="btn btn-outline-light hover-scale">List Your Property</a>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-12 col-md-4">
+                        <div class="glass-card p-4 text-center hover-scale">
+                            <div class="h3 text-white fw-bold">500+</div>
+                            <div class="text-blue-200">Premium Listings</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="glass-card p-4 text-center hover-scale">
+                            <div class="h3 text-white fw-bold">98%</div>
+                            <div class="text-blue-200">Client Satisfaction</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="glass-card p-4 text-center hover-scale">
+                            <div class="h3 text-white fw-bold">10+</div>
+                            <div class="text-blue-200">Years Experience</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="about-section" id="about">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h1>About <span class="text-gradient">Elite Estates Hub</span></h1>
+                <p class="lead text-muted">A premier real estate platform connecting discerning buyers with exceptional properties. Our intelligent matching system and expert agents ensure you find the perfect home.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card hover-scale">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-indigo-100 me-3">
+                                <i class="fas fa-search-dollar text-indigo-600"></i>
+                            </div>
+                            <h4 class="mb-0">Smart Property Matching</h4>
+                        </div>
+                        <p class="text-muted">Our AI-driven algorithm evaluates your preferences to match you with properties that perfectly fit your lifestyle and investment goals.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card hover-scale">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-green-100 me-3">
+                                <i class="fas fa-shield-alt text-green-600"></i>
+                            </div>
+                            <h4 class="mb-0">Verified Listings</h4>
+                        </div>
+                        <p class="text-muted">Every property is personally vetted by our team to ensure accuracy and quality. No misleading information or fake listings.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card hover-scale">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-yellow-100 me-3">
+                                <i class="fas fa-home text-yellow-600"></i>
+                            </div>
+                            <h4 class="mb-0">Luxury Portfolio</h4>
+                        </div>
+                        <p class="text-muted">Access exclusive high-end properties not available on conventional platforms. From penthouses to private islands, we have it all.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="feature-card hover-scale">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-box bg-blue-100 me-3">
+                                <i class="fas fa-headset text-blue-600"></i>
+                            </div>
+                            <h4 class="mb-0">Dedicated Concierge</h4>
+                        </div>
+                        <p class="text-muted">Your personal real estate concierge handles everything from viewings to paperwork, making your property journey seamless.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <div class="p-5 rounded-3 bg-primary text-white">
+                    <h2 class="h3 mb-3">Ready to find your dream property?</h2>
+                    <p class="mb-3">Join thousands of satisfied clients who found their perfect home through Elite Estates Hub.</p>
+                    <a href="#" class="btn btn-light text-primary">Get Started Today</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="bg-overlay"></div>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fa-regular fa-compass fa-2x text-accent me-3"></i>
+                            <h4 class="mb-0 text-white">Elite Estates Hub</h4>
+                        </div>
+                        <p class="text-white-50">Discover exceptional properties and experience unparalleled service in your real estate journey.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-4">
+                        <h5 class="text-white mb-4">Quick Links</h5>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item mb-2"><a href="#" class="nav-link">Home</a></li>
+                                    <li class="nav-item mb-2"><a href="#" class="nav-link">Properties</a></li>
+                                    <li class="nav-item mb-2"><a href="#" class="nav-link">Featured</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-6">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item mb-2"><a href="#" class="nav-link">About Us</a></li>
+                                    <li class="nav-item mb-2"><a href="#" class="nav-link">Services</a></li>
+                                    <li class="nav-item mb-2"><a href="#" class="nav-link">Contact</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-4">
+                        <h5 class="text-white mb-4">Connect With Us</h5>
+                        <p class="text-white-50 mb-4">Follow us on social media for the latest property updates.</p>
+                        <div class="d-flex">
+                            <a href="#" class="social-icon me-3"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-icon me-3"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-top text-center">
+                <p class="text-white-50 mb-0">&copy; @2025 Elite Estates Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('mainNavbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

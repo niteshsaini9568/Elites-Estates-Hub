@@ -1,0 +1,37 @@
+<% layout("/layouts/boilerplate")%>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card border-0 shadow-lg rounded-3">
+                    <div class="card-body p-5">
+                        <h2 class="card-title text-center mb-4 fw-bold text-dark">Book Your Stay</h2>
+                        <form class="pay-form">
+                            <div class="mb-4">
+                                <label for="name" class="form-label fw-semibold text-muted">Full Name</label>
+                                <input type="text" class="form-control form-control-lg shadow-sm" id="name" 
+                                    placeholder="Enter your full name" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="form-label fw-semibold text-muted">Email Address</label>
+                                <input type="email" class="form-control form-control-lg shadow-sm" id="email" 
+                                    placeholder="Enter your email address" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="days" class="form-label fw-semibold text-muted">Number of Days</label>
+                                <input type="number" class="form-control form-control-lg shadow-sm" id="days" 
+                                    placeholder="Enter number of days" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="contact" class="form-label fw-semibold text-muted">Contact Number</label>
+                                <input type="tel" class="form-control form-control-lg shadow-sm" id="contact" 
+                                    placeholder="Enter your contact number" required>
+                            </div>
+                            <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_OKNAGdvmPH0wKc" async> </script> </form>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
