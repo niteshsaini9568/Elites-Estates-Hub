@@ -13,7 +13,6 @@
             <h1 class="display-4 fw-bold mb-3"><%= listing.title %></h1>
             <div class="d-flex align-items-center mb-3">
               <div>
-                <p class="mb-0">Hosted by <b><%= listing.owner.username %></b></p>
                 <div class="text-warning">
                   <% for(let i = 0; i < 5; i++) { %>
                     <i class="bi bi-star<%= i < listing.averageRating ? '-fill' : '' %>"></i>
